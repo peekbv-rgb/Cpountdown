@@ -24,7 +24,7 @@ Zelfstandige Windows/Streamlit-app voor een verticale countdownvideo van exact
 
 ## Git Bash
 
-    ./start.sh
+    bash start.sh
 
 ## Veiligheid
 
