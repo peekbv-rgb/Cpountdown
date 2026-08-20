@@ -127,11 +127,22 @@ def render_countdown(
             index += 1
 
         timeline = concatenate_videoclips(pieces, method="compose").with_duration(TOTAL_SECONDS)
-        timer = TextClip(
-            text=countdown_value, font_size=260, color="white", stroke_color="black",
-            stroke_width=8, method="label", duration=TOTAL_SECONDS,
-        ).with_position(("center", 0.72), relative=True)
-        final = CompositeVideoClip([timeline, timer], size=size).with_duration(TOTAL_SECONDS)
+        # MoviePy TextClip accepteert tekst, geen Python-functie. Maak daarom
+        # 62 losse lagen: READY en daarna exact één seconde per cijfer 60..0.
+        timer_layers = [
+            TextClip(
+                text="READY", font_size=220, color="white", stroke_color="black",
+                stroke_width=8, method="label", duration=1,
+            ).with_start(0).with_position(("center", 0.72), relative=True)
+        ]
+        for second, value in enumerate(range(60, -1, -1), start=1):
+            timer_layers.append(
+                TextClip(
+                    text=str(value), font_size=260, color="white", stroke_color="black",
+                    stroke_width=8, method="label", duration=1,
+                ).with_start(second).with_position(("center", 0.72), relative=True)
+            )
+        final = CompositeVideoClip([timeline, *timer_layers], size=size).with_duration(TOTAL_SECONDS)
 
         if music_path:
             music = AudioFileClip(str(music_path))
