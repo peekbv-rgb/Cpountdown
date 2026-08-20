@@ -18,6 +18,7 @@ if not exist ".env" (
   echo Vul eerst je nieuwe KLING_API_KEY in .env in.
   start notepad ".env"
   pause
+  exit /b
 )
 
 ".venv\Scripts\python.exe" -m streamlit run app.py
